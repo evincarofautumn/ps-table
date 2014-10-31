@@ -10,8 +10,13 @@ use Time::HiRes 'gettimeofday';
 pod2usage(2) if @ARGV != 1;
 
 my $command = shift @ARGV;
-my $pid = open(my $process, '-|', $command);
-die "cannot run command ($command): $!\n" if not $pid;
+my $pid = 0;
+my $process;
+{
+  no warnings;
+  $pid = open($process, '-|', $command);
+}
+die "error: cannot run command ($command): $!\n" if not $pid;
 
 my $start_time = gettimeofday;
 my $kid = 0;
