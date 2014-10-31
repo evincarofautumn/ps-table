@@ -23,7 +23,11 @@ pod2usage(0) if $help;
 
 chdir $working_directory if $working_directory;
 
-my $command = shift @ARGV;
+my $command = '';
+{
+  local $" = ' ';
+  $command = "@ARGV";
+}
 my $pid = 0;
 my $process;
 {
@@ -66,7 +70,7 @@ ps-table.pl - A tool for getting a table of the resident set size (RSS) of a pro
 
 =item I<COMMAND>
 
-The shell command to run.
+The shell command to run. If I<COMMAND> contains command-line arguments, you should prefix it with C<-->.
 
 =item B<--absolute-timestamps>
 
