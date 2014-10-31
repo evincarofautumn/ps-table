@@ -38,9 +38,11 @@ die "error: cannot run command ($command): $!\n" if not $pid;
 
 my $start_time = gettimeofday;
 my $kid = 0;
-until (eof $process or $kid < 0) {
+
+while (1) {
   my $timestamp = gettimeofday;
   my $rss = `ps -o 'rss=' -p "$pid"`;
+  last if $rss == 0;
   if ($? == -1) {
 	die "error: failed to execute ps: $!\n";
   } elsif ($? & 127) {
@@ -52,6 +54,7 @@ until (eof $process or $kid < 0) {
   $timestamp -= $start_time unless $absolute_timestamps;
   printf "%.3f\t%d\n", $timestamp, $rss;
   $kid = waitpid($pid, WNOHANG);
+  last if $kid > 0;
 }
 
 __END__
