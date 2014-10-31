@@ -5,7 +5,7 @@ use strict;
 
 use POSIX qw(strftime :sys_wait_h);
 use Pod::Usage;
-use Time::HiRes 'gettimeofday';
+use Time::HiRes qw(gettimeofday);
 
 pod2usage(2) if @ARGV != 1;
 
